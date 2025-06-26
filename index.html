@@ -1,35 +1,147 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shopeasy</title>
-  <link rel="stylesheet" href="style.css">
-<!--
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
-    h1 { text-align: center; }
-    .products { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-    .product { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 0 5px #ccc; width: 200px; }
-    .product img { width: 100%; height: auto; border-radius: 5px; }
-    .product h2 { font-size: 1.2em; margin: 10px 0 5px; }
-    .product p { margin: 5px 0; }
-    button { background: #28a745; border: none; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #218838; }
-    #cart { margin-top: 40px; background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin-left: auto; margin-right: auto; }
-    #cart h2 { text-align: center; }
-    #cart-items { list-style: none; padding: 0; }
-    #cart-items li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddd; }
-    #cart-total { font-weight: bold; text-align: right; margin-top: 10px; }
-    .remove-btn { background: #dc3545; padding: 4px 8px; border-radius: 3px; font-size: 0.9em; color: white; border: none; cursor: pointer; }
-    .remove-btn:hover { background: #c82333; }
-  -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shopeasy - Boutique en ligne</title>
+<style>
+  :root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --bg: #f9fafb;
+    --text: #111827;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    margin: 0;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  .product {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 200px;
+  }
+  .product:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  }
+  .product img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  .product h2 {
+    font-size: 1.2em;
+    margin: 10px 0 5px;
+  }
+  .product p {
+    margin: 5px 0;
+  }
+  button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: var(--primary-hover);
+  }
+  #cart {
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  #cart-items li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  .remove-btn {
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .remove-btn:hover {
+    background: var(--danger-hover);
+  }
+  @media (max-width: 600px) {
+    .products {
+      flex-direction: column;
+      align-items: center;
+    }
+    .product {
+      width: 90%;
+    }
+  }
+  /* Contact form styles */
+  form input, form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
+  }
+  form button[type="submit"] {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  form button[type="submit"]:hover {
+    background: var(--primary-hover);
+  }
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #555;
+  }
+</style>
 </head>
 <body>
 
-<h1>Ma Boutique Shopeasy</h1>
+<h1>Shopeasy</h1>
 
-<div class="products" id="products"></div>
+<div style="text-align:center; margin-bottom: 20px;">
+  <label for="category-select">Filtrer par catégorie :</label>
+  <select id="category-select" onchange="filterProducts()">
+    <option value="all">Tous</option>
+    <option value="Vêtements">Vêtements</option>
+    <option value="Accessoires">Accessoires</option>
+  </select>
+</div>
+
+<div class="products" id="products">
+  <!-- Produits affichés ici -->
+</div>
 
 <div id="cart">
   <h2>Panier</h2>
@@ -37,67 +149,99 @@
   <div id="cart-total">Total: 0 €</div>
 </div>
 
+<div style="text-align: center; margin-top: 40px;">
+  <button onclick="alert('Paiement fictif effectué avec succès !')" style="background:#ffc107; color:#000; padding: 12px 20px; border-radius: 5px; border:none; cursor:pointer;">
+    Payer maintenant
+  </button>
+</div>
+
+<section style="margin-top: 50px; text-align: center;">
+  <h2>Contactez-nous</h2>
+  <form onsubmit="event.preventDefault(); alert('Merci pour votre message !'); this.reset();">
+    <input type="text" placeholder="Votre nom" required />
+    <input type="email" placeholder="Votre email" required />
+    <textarea placeholder="Votre message" required></textarea>
+    <button type="submit">Envoyer</button>
+  </form>
+</section>
+
+<footer>© 2025 Shopeasy. Tous droits réservés.</footer>
+
 <script>
-  const products = [
-    { id: 1, name: "T-shirt", price: 19.99, img: "https://via.placeholder.com/200?text=T-shirt" },
-    { id: 2, name: "Casquette", price: 14.99, img: "https://via.placeholder.com/200?text=Casquette" },
-    { id: 3, name: "Sweat à capuche", price: 39.99, img: "https://via.placeholder.com/200?text=Sweat" },
-  ];
+// Produits avec catégorie
+const products = [
+  { id: 1, name: "T-shirt", price: 19.99, category: "Vêtements", img: "https://via.placeholder.com/200?text=T-shirt" },
+  { id: 2, name: "Casquette", price: 14.99, category: "Accessoires", img: "https://via.placeholder.com/200?text=Casquette" },
+  { id: 3, name: "Sweat à capuche", price: 39.99, category: "Vêtements", img: "https://via.placeholder.com/200?text=Sweat" },
+];
 
-  let cart = [];
+// Panier stocké en mémoire
+let cart = [];
 
-  function displayProducts() {
-    const productsDiv = document.getElementById("products");
-    productsDiv.innerHTML = "";
-    products.forEach(product => {
-      const prodDiv = document.createElement("div");
-      prodDiv.className = "product";
-      prodDiv.innerHTML = `
-        <img src="${product.img}" alt="${product.name}" />
-        <h2>${product.name}</h2>
-        <p>Prix : ${product.price.toFixed(2)} €</p>
-        <button onclick="addToCart(${product.id})">Ajouter au panier</button>
-      `;
-      productsDiv.appendChild(prodDiv);
-    });
+// Afficher produits avec filtre (paramètre optionnel)
+function displayProducts(productList = products) {
+  const productsDiv = document.getElementById("products");
+  productsDiv.innerHTML = "";
+  productList.forEach(product => {
+    const prodDiv = document.createElement("div");
+    prodDiv.className = "product";
+    prodDiv.innerHTML = `
+      <img src="${product.img}" alt="${product.name}" />
+      <h2>${product.name}</h2>
+      <p>Prix : ${product.price.toFixed(2)} €</p>
+      <button onclick="addToCart(${product.id})">Ajouter au panier</button>
+    `;
+    productsDiv.appendChild(prodDiv);
+  });
+}
+
+// Filtrer produits par catégorie
+function filterProducts() {
+  const selectedCategory = document.getElementById("category-select").value;
+  const filtered = selectedCategory === "all" ? products : products.filter(p => p.category === selectedCategory);
+  displayProducts(filtered);
+}
+
+// Ajouter au panier
+function addToCart(productId) {
+  const product = products.find(p => p.id === productId);
+  const cartItem = cart.find(item => item.id === productId);
+  if (cartItem) {
+    cartItem.quantity++;
+  } else {
+    cart.push({ ...product, quantity: 1 });
   }
-
-  function addToCart(productId) {
-    const product = products.find(p => p.id === productId);
-    const cartItem = cart.find(item => item.id === productId);
-    if (cartItem) {
-      cartItem.quantity++;
-    } else {
-      cart.push({ ...product, quantity: 1 });
-    }
-    displayCart();
-  }
-
-  function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    displayCart();
-  }
-
-  function displayCart() {
-    const cartItemsUl = document.getElementById("cart-items");
-    cartItemsUl.innerHTML = "";
-    let total = 0;
-
-    cart.forEach(item => {
-      total += item.price * item.quantity;
-      const li = document.createElement("li");
-      li.innerHTML = `
-        ${item.name} x ${item.quantity} - ${(item.price * item.quantity).toFixed(2)} €
-        <button class="remove-btn" onclick="removeFromCart(${item.id})">Supprimer</button>
-      `;
-      cartItemsUl.appendChild(li);
-    });
-
-    document.getElementById("cart-total").textContent = `Total: ${total.toFixed(2)} €`;
-  }
-
-  displayProducts();
   displayCart();
+}
+
+// Supprimer du panier
+function removeFromCart(productId) {
+  cart = cart.filter(item => item.id !== productId);
+  displayCart();
+}
+
+// Afficher panier
+function displayCart() {
+  const cartItemsUl = document.getElementById("cart-items");
+  cartItemsUl.innerHTML = "";
+  let total = 0;
+
+  cart.forEach(item => {
+    total += item.price * item.quantity;
+    const li = document.createElement("li");
+    li.innerHTML = `
+      ${item.name} x ${item.quantity} - ${(item.price * item.quantity).toFixed(2)} €
+      <button class="remove-btn" onclick="removeFromCart(${item.id})">Supprimer</button>
+    `;
+    cartItemsUl.appendChild(li);
+  });
+
+  document.getElementById("cart-total").textContent = `Total: ${total.toFixed(2)} €`;
+}
+
+// Initialisation
+displayProducts();
+displayCart();
 </script>
 
 </body>
