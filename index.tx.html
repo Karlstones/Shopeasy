@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shopeasy - Gestion Produits</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f7f7f7; }
+  h1 { text-align: center; }
+  #filters { margin-bottom: 20px; text-align: center; }
+  .products { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+  .product { background: white; padding: 15px; border-radius: 8px; width: 220px; box-shadow: 0 0 6px #aaa; }
+  .product img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
+  .product h2 { font-size: 1.1em; margin: 10px 0 5px; }
+  .product p { margin: 5px 0; }
+  button { background: #28a745; border: none; color: white; padding: 10px; border-radius: 5px; cursor: pointer; }
+  button:disabled { background: #aaa; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<h1>Shopeasy - Produits</h1>
+
+<div id="filters">
+  <label for="category">Filtrer par catégorie : </label>
+  <select id="category" onchange="filterProducts()">
+    <option value="all">Tous</option>
+    <option value="vetements">Vêtements</option>
+    <option value="accessoires">Accessoires</option>
+    <option value="electronique">Électronique</option>
+  </select>
+</div>
+
+<div class="products" id="products"></div>
+
+<script>
+const products = [
+  { id: 1, name: "T-shirt basique", price: 19.99, category: "vetements", stock: 10, img: "https://via.placeholder.com/220x150?text=T-shirt" },
+  { id: 2, name: "Casquette", price: 14.99, category: "accessoires", stock: 5, img: "https://via.placeholder.com/220x150?text=Casquette" },
+  { id: 3, name: "Sweat à capuche", price: 39.99, category: "vetements", stock: 0, img: "https://via.placeholder.com/220x150?text=Sweat" },
+  { id: 4, name: "Montre connectée", price: 99.99, category: "electronique", stock: 3, img: "https://via.placeholder.com/220x150?text=Montre" },
+];
+
+let displayedProducts = [...products];
+
+function displayProducts() {
+  const container = document.getElementById('products');
+  container.innerHTML = '';
+  displayedProducts.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML = `
+      <img src="${p.img}" alt="${p.name}" />
+      <h2>${p.name}</h2>
+      <p>Prix : ${p.price.toFixed(2)} €</p>
+      <p>Stock : ${p.stock}</p>
+      <button ${p.stock === 0 ? 'disabled' : ''} onclick="addToCart(${p.id})">
+        ${p.stock === 0 ? 'Rupture de stock' : 'Ajouter au panier'}
+      </button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function filterProducts() {
+  const cat = document.getElementById('category').value;
+  displayedProducts = cat === 'all' ? [...products] : products.filter(p => p.category === cat);
+  displayProducts();
+}
+
+// Panier en mémoire
+let cart = [];
+
+function addToCart(id) {
+  const prod = products.find(p => p.id === id);
+  if(prod.stock === 0) {
+    alert("Produit en rupture de stock !");
+    return;
+  }
+  let item = cart.find(i => i.id === id);
+  if(item) {
+    if(item.quantity < prod.stock) {
+      item.quantity++;
+    } else {
+      alert("Stock insuffisant !");
+      return;
+    }
+  } else {
+    cart.push({ ...prod, quantity: 1 });
+  }
+  prod.stock--; // Mise à jour stock visible
+  filterProducts();
+  displayCart();
+}
+
+function displayCart() {
+  console.clear();
+  console.log("Panier actuel :");
+  cart.forEach(item => {
+    console.log(`${item.name} x${item.quantity}`);
+  });
+  if(cart.length === 0) console.log("Panier vide");
+}
+
+displayProducts();
+</script>
+
+</body>
+</html>
