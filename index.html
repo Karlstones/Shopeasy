@@ -12,11 +12,38 @@
     <button class="snipcart-checkout">🛒 Voir le panier</button>
   </header>
 
-  <main id="produits">
-    <!-- Les produits seront générés ici -->
+  <main>
+    <div class="produit">
+      <img src="https://via.placeholder.com/200" alt="Produit 1">
+      <h2>Produit 1</h2>
+      <p>19.99€</p>
+      <button 
+        class="snipcart-add-item"
+        data-item-id="prod1"
+        data-item-name="Produit 1"
+        data-item-price="19.99"
+        data-item-url="/"
+        data-item-description="Un produit de qualité.">
+        Ajouter au panier
+      </button>
+    </div>
+
+    <div class="produit">
+      <img src="https://via.placeholder.com/200" alt="Produit 2">
+      <h2>Produit 2</h2>
+      <p>29.99€</p>
+      <button 
+        class="snipcart-add-item"
+        data-item-id="prod2"
+        data-item-name="Produit 2"
+        data-item-price="29.99"
+        data-item-url="/"
+        data-item-description="Deuxième produit fantastique.">
+        Ajouter au panier
+      </button>
+    </div>
   </main>
 
-  <script src="script.js"></script>
   <script async src="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.js"></script>
   <div hidden id="snipcart" data-api-key="TA_CLE_API_SNIPCART"></div>
 </body>
