@@ -1,0 +1,16 @@
+[
+  {
+    "id": "prod1",
+    "name": "Produit Alpha",
+    "price": 19.99,
+    "description": "Premier produit automatique.",
+    "image": "https://via.placeholder.com/200"
+  },
+  {
+    "id": "prod2",
+    "name": "Produit Beta",
+    "price": 29.99,
+    "description": "Deuxième produit automatique.",
+    "image": "https://via.placeholder.com/200"
+  }
+]
